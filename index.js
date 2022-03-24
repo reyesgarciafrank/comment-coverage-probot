@@ -18,7 +18,7 @@ module.exports = (app) => {
       const org = pr.base.repo.owner.login;
       const repo = pr.base.repo.name;
       let pull_number = context.payload.pull_request.number;
-
+      let message = "";
       const changedFiles = await context.octokit.paginate(
         context.octokit.pulls.listFiles,
         { owner: org, repo, pull_number, per_page: 100 }
@@ -30,19 +30,25 @@ module.exports = (app) => {
         if (lines) {
           lines.forEach((line, index) => {
             line;
-            const match = line.indexOf("public");
+            const match =
+              line.indexOf("public") === -1 ? line.indexOf("private") : 0;
             if (match != -1) {
               if (index > 0) {
                 const l = lines[index - 1];
                 if (l !== "\n+" || l !== "-") {
                   // si es diferente del vacio o no es una linea eliminada
                   if (l.match(/\*\//) || l.match(/[/\t]*[/\n]*[/\s]*\/\//)) {
-                    console.log(l);
+                    not_comment = false;
                   } else {
                     console.log("Metodo sin comnetarios");
                     not_comment = true;
+                    message = "The method does not have an associated comment";
                   }
                 }
+              } else {
+                not_comment = true;
+                message =
+                  "It is not possible to verify if the method has an associated comment";
               }
             }
           });
@@ -60,7 +66,7 @@ module.exports = (app) => {
         completed_at: new Date().toISOString(),
         output: {
           title: "Comment bot",
-          summary: "Coverage",
+          summary: message,
         },
       });
     }

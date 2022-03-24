@@ -1,11 +1,11 @@
 {
-  "name": "my-app",
+  "name": "comment-coverage-probot",
   "version": "1.0.0",
   "private": true,
   "description": "A Probot app",
   "author": "Frank Reyes <reyesgarciafrank@gmail.com>",
   "license": "ISC",
-  "homepage": "https://github.com/reyesgarciafrank/my-app",
+  "homepage": "https://github.com/reyesgarciafrank/comment-coverage-probot",
   "keywords": [
     "probot",
     "github",
