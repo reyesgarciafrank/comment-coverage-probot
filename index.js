@@ -36,11 +36,9 @@ module.exports = (app) => {
               if (index > 0) {
                 const l = lines[index - 1];
                 if (l !== "\n+" || l !== "-") {
-                  // si es diferente del vacio o no es una linea eliminada
                   if (l.match(/\*\//) || l.match(/[/\t]*[/\n]*[/\s]*\/\//)) {
                     not_comment = false;
                   } else {
-                    console.log("Metodo sin comnetarios");
                     not_comment = true;
                     message = "The method does not have an associated comment";
                   }
