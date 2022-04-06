@@ -19,6 +19,25 @@ module.exports = (app) => {
       const repo = pr.base.repo.name;
       let pull_number = context.payload.pull_request.number;
       let message = "";
+      // create check queue
+
+      context.octokit.checks.create({
+        headers: {
+          // accept: "application/vnd.github.v3+json"
+          accept: "application/vnd.github.antiope-preview+json",
+        },
+        owner: org,
+        repo: repo,
+        name: "Comment bot",
+        status: "queued",
+        started_at: new Date().toISOString(),
+        head_sha: pr.head.sha,
+        output: {
+          title: "Comment bot",
+          summary: "The Comment bot will begin shortly",
+        },
+      });
+
       const changedFiles = await context.octokit.paginate(
         context.octokit.pulls.listFiles,
         { owner: org, repo, pull_number, per_page: 100 }
